@@ -34,14 +34,15 @@ extension Pow on Infinity {
       }
     }
 
-    logOperation('Pow ${toString()} on ${other.toString()} is $_result', exiting: true);
+    logOperation('Pow ${toString()} on ${other.toString()} is $_result',
+        exiting: true);
 
     return _result;
   }
 
   Infinity pow10() {
     logOperation('pow10 on ${toString()}');
-    Infinity _result;
+    Infinity? _result;
     final num _layer = layer + 1;
 
     if (!layer.isFinite || !mantissa.isFinite) {

@@ -22,10 +22,10 @@ extension AddLayer on Infinity {
     return _result;
   }
 
-  Infinity layerAdd10(num value) {
+  Infinity? layerAdd10(num value) {
     logAbbreviation('layerAdd10 on ${toString()} value: $value');
     num other = Infinity.fromNum(value).toNumber();
-    Infinity _result;
+    Infinity? _result;
 
     final int layerAdd = other.truncate();
     other -= layerAdd;
@@ -65,7 +65,8 @@ extension AddLayer on Infinity {
         //layerAdd10: like adding 'other' to the number's slog(base) representation. Very similar to tetrate base 10 and iterated log base 10. Also equivalent to adding a fractional amount to the number's layer in its break_eternity.js representation.
         if (other > 0) {
           //Note that every integer slog10 value, the formula changes, so if we're near such a number, we have to spend exactly enough layerother to hit it, and then use the new formula.
-          final num otherToNextSlog = (math.log(1e10) / math.log(mantissa)).log10();
+          final num otherToNextSlog =
+              (math.log(1e10) / math.log(mantissa)).log10();
 
           if (otherToNextSlog < other) {
             mantissa = 1e10.log10();

@@ -3,11 +3,11 @@ part of infinity;
 extension Pentate on Infinity {
   //Pentation/pentate: The result of tetrating 'height' times in a row. An absurdly strong operator - Decimal.pentate(2, 4.28) and Decimal.pentate(10, 2.37) are already too huge for break_eternity.js!
   // https://en.wikipedia.org/wiki/Pentation
-  Infinity pentate({double height = 2, Infinity other}) {
+  Infinity pentate({double height = 2, Infinity? other}) {
     other ??= Infinity.fromComponents(1, 0, 1);
     logOperation('Pentate ${toString()} and ${other.toString()} : $height');
 
-    Infinity _result;
+    Infinity? _result;
 
     final double oldHeight = height;
     height = height.truncateToDouble();
@@ -28,7 +28,7 @@ extension Pentate on Infinity {
     }
 
     for (int i = 0; i < height; ++i) {
-      other = tetrate(height: other.toNumber().toDouble());
+      other = tetrate(height: other!.toNumber().toDouble());
       if (!other.layer.isFinite || !other.mantissa.isFinite) {
         //bail if we're NaN
         _result = other;
@@ -42,6 +42,6 @@ extension Pentate on Infinity {
 
     logOperation('Pentate ${toString()} is $_result', exiting: true);
 
-    return other;
+    return other!;
   }
 }

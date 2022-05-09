@@ -9,15 +9,18 @@ extension Lambert on Infinity {
     Infinity _result;
 
     if (this < -0.3678794411710499) {
-      throw UnsupportedError('lambertw is unimplemented for results less than -1, sorry!');
+      throw UnsupportedError(
+          'lambertw is unimplemented for results less than -1, sorry!');
     } else if (mantissa < 0) {
       _result = Infinity.fromNum(fLambertW(other: toNumber()));
     } else if (layer == 0) {
       _result = Infinity.fromNum(fLambertW(other: sign * mantissa));
     } else if (layer == 1) {
-      _result = dLambertW();
+      throw Exception();
+      // _result = dLambertW();
     } else if (layer == 2) {
-      _result = dLambertW();
+      throw Exception();
+      // _result = dLambertW();
     } else {
       _result = Infinity.fromComponents(sign, layer - 1, mantissa, false);
     }
@@ -31,10 +34,11 @@ extension Lambert on Infinity {
   /// The evaluation can become inaccurate very close to the branch point
   /// at ``-1/e``. In some corner cases, `lambertw` might currently
   /// fail to converge, or can end up on the wrong branch.
-  Infinity dLambertW({Infinity other, num tolerance = 1e-10}) {
-    logFunction('d Lambert W on ${toString()} with ${other.toString()} tolerance is: $tolerance');
+  Infinity dLambertW({required Infinity other, num tolerance = 1e-10}) {
+    logFunction(
+        'd Lambert W on ${toString()} with ${other.toString()} tolerance is: $tolerance');
 
-    Infinity _result;
+    Infinity? _result;
     Infinity w;
     Infinity ew, wewz, wn;
 
@@ -56,8 +60,11 @@ extension Lambert on Infinity {
       ew = (-w).exp();
       wewz = w.subtract(other.multiply(ew));
       wn = w.subtract(wewz.divide(w.add(Infinity.one()).subtract(
-          (w.add(Infinity.fromNum(2))).multiply(wewz).divide((Infinity.fromNum(2) * w).add(Infinity.fromNum(2))))));
-      if ((wn.subtract(w)).abs() < (wn.multiply(Infinity.fromNum(tolerance)).abs())) {
+          (w.add(Infinity.fromNum(2)))
+              .multiply(wewz)
+              .divide((Infinity.fromNum(2) * w).add(Infinity.fromNum(2))))));
+      if ((wn.subtract(w)).abs() <
+          (wn.multiply(Infinity.fromNum(tolerance)).abs())) {
         _result = wn;
         break;
       } else {
@@ -76,10 +83,11 @@ extension Lambert on Infinity {
   /// The Lambert W function, also called the omega function or product logarithm, is the solution W(x) === x*e^x.
   /// https://en.wikipedia.org/wiki/Lambert_W_function
   /// Some special values, for testing: https://en.wikipedia.org/wiki/Lambert_W_function#Special_values
-  num fLambertW({num other, num tolerance = 1e-10}) {
-    logFunction('f Lambert W on ${toString()} with ${other.toString()} tolerance is: $tolerance');
+  num fLambertW({required num other, num tolerance = 1e-10}) {
+    logFunction(
+        'f Lambert W on ${toString()} with ${other.toString()} tolerance is: $tolerance');
 
-    num _result;
+    num? _result;
 
     num w;
     num wn;

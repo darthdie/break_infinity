@@ -4,11 +4,11 @@ extension Tetrate on Infinity {
   /// Tetration/tetrate: The result of exponentiating 'this' to 'this' 'height' times in a row.  https://en.wikipedia.org/wiki/Tetration
   /// If payload != 1, then this is 'iterated exponentiation', the result of exping (payload) to base (this) (height) times. https://andydude.github.io/tetration/archives/tetration2/ident.html
   /// Works with negative and positive real heights.
-  Infinity tetrate({double height = 2, Infinity other}) {
+  Infinity tetrate({double height = 2, Infinity? other}) {
     other ??= Infinity.fromComponents(1, 0, 1);
     logOperation('Tetrate ${toString()} and ${other.toString()} ($height)');
 
-    Infinity _result;
+    Infinity? _result;
 
     if (height == double.infinity) {
       final Infinity _negLn = naturalLogarithm().neg();
@@ -39,7 +39,7 @@ extension Tetrate on Infinity {
       }
 
       for (int i = 0; i < height; ++i) {
-        other = pow(other);
+        other = pow(other!);
         //bail if we're NaN
         if (!other.layer.isFinite || !other.mantissa.isFinite) {
           _result = other;
@@ -47,7 +47,8 @@ extension Tetrate on Infinity {
         }
         //shortcut
         if (other.layer - layer > 3) {
-          _result = Infinity.fromComponents(other.sign, other.layer + height - i - 1, other.mantissa, false);
+          _result = Infinity.fromComponents(
+              other.sign, other.layer + height - i - 1, other.mantissa, false);
           break;
         }
         //give up after 100 iterations if nothing is happening
@@ -62,6 +63,6 @@ extension Tetrate on Infinity {
 
     logOperation('Tetrate ${toString()} ($height) is: $_result', exiting: true);
 
-    return _result;
+    return _result!;
   }
 }

@@ -1,7 +1,7 @@
 part of infinity;
 
 class Infinity with Logger implements Comparable<Infinity> {
-  Infinity(this.mantissa, this.exponent);
+  // Infinity(this.mantissa, this.exponent);
 
   Infinity.zero() {
     mantissa = 0;
@@ -22,7 +22,8 @@ class Infinity with Logger implements Comparable<Infinity> {
   }
 
   Infinity.fromNum(num value, [bool normalizeNumber = true]) {
-    logNewInfinity('Infinity from number: $value - Normalize: $normalizeNumber');
+    logNewInfinity(
+        'Infinity from number: $value - Normalize: $normalizeNumber');
     mantissa = value.toDouble().abs();
     _sign = value.sign.toInt();
     layer = 0;
@@ -34,8 +35,10 @@ class Infinity with Logger implements Comparable<Infinity> {
     logNormalizedInfinity('Infinity normalized: ${toDebugString()}');
   }
 
-  Infinity.fromComponents(this._sign, this.layer, this.mantissa, [bool normalizeNumber = true]) {
-    logNewInfinity('Infinity from components: [$_sign, $layer, $mantissa] - Normalize: $normalizeNumber');
+  Infinity.fromComponents(this._sign, this.layer, this.mantissa,
+      [bool normalizeNumber = true]) {
+    logNewInfinity(
+        'Infinity from components: [$_sign, $layer, $mantissa] - Normalize: $normalizeNumber');
 
     if (normalizeNumber) {
       normalize();
@@ -46,7 +49,7 @@ class Infinity with Logger implements Comparable<Infinity> {
 
   Infinity.fromString(String value) {
     logNewInfinity('Infinity from string: [$value]');
-    Infinity _result;
+    Infinity? _result;
 
     value = value.toLowerCase();
 
@@ -77,9 +80,9 @@ class Infinity with Logger implements Comparable<Infinity> {
   bool get isNegative => sign == -1;
   bool get isPositive => sign == 1;
 
-  num mantissa;
-  num exponent;
-  int _sign;
+  num mantissa = 0;
+  num exponent = 0;
+  int _sign = 0;
   int get sign => _sign;
 
   set sign(int value) {
@@ -92,7 +95,7 @@ class Infinity with Logger implements Comparable<Infinity> {
     }
   }
 
-  num layer;
+  num layer = 0;
   bool _roundResult = false;
 
   num get normalizedMantissa {
@@ -113,10 +116,13 @@ class Infinity with Logger implements Comparable<Infinity> {
       final num _residue = mantissa - mantissa.floor();
 
       if (_roundResult) {
-        return (sign * math.pow(10, _residue)).roundToDouble(); // Lose precision for doubles, gain accuracy on int
+        return (sign * math.pow(10, _residue))
+            .roundToDouble(); // Lose precision for doubles, gain accuracy on int
       }
 
-      return sign * math.pow(10, _residue); // Lose precision for doubles, gain accuracy on int
+      return sign *
+          math.pow(
+              10, _residue); // Lose precision for doubles, gain accuracy on int
     }
 
     return sign;
@@ -141,7 +147,7 @@ class Infinity with Logger implements Comparable<Infinity> {
   }
 
   num powerOf10(num power) {
-    return double.tryParse('1e$power');
+    return double.parse('1e$power');
   }
 
   void normalize() {
@@ -215,7 +221,7 @@ class Infinity with Logger implements Comparable<Infinity> {
   }
 
   Infinity getInfinity(dynamic other) {
-    Infinity _inf;
+    Infinity _inf = Infinity.nan();
     if (other is num) {
       _inf = Infinity.fromNum(other);
     } else if (other is Infinity) {
@@ -237,9 +243,13 @@ class Infinity with Logger implements Comparable<Infinity> {
       return '${normalizedMantissa}e$normalizedExponent';
     } else {
       if (layer <= maxEsInRow) {
-        return (sign == -1 ? '-' : '') + ''.padRight(layer.toInt(), 'e') + mantissa.toString();
+        return (sign == -1 ? '-' : '') +
+            ''.padRight(layer.toInt(), 'e') +
+            mantissa.toString();
       } else {
-        return (sign == -1 ? '-' : '') + '(${'e^$layer'})' + mantissa.toString();
+        return (sign == -1 ? '-' : '') +
+            '(${'e^$layer'})' +
+            mantissa.toString();
       }
     }
   }
@@ -255,9 +265,13 @@ class Infinity with Logger implements Comparable<Infinity> {
       return '${valueWithDecimalPlaces(normalizedMantissa, places)}e${valueWithDecimalPlaces(normalizedExponent, places)}';
     } else {
       if (layer <= maxEsInRow) {
-        return (sign == -1 ? '-' : '') + ''.padRight(layer.toInt(), 'e') + valueWithDecimalPlaces(mantissa, places);
+        return (sign == -1 ? '-' : '') +
+            ''.padRight(layer.toInt(), 'e') +
+            valueWithDecimalPlaces(mantissa, places);
       } else {
-        return (sign == -1 ? '-' : '') + '(${'e^$layer'})' + valueWithDecimalPlaces(mantissa, places);
+        return (sign == -1 ? '-' : '') +
+            '(${'e^$layer'})' +
+            valueWithDecimalPlaces(mantissa, places);
       }
     }
   }
@@ -269,7 +283,8 @@ class Infinity with Logger implements Comparable<Infinity> {
   String valueWithDecimalPlaces(num value, int places) {
     final int len = places + 1;
     final int numDigits = value.abs().log10().ceil();
-    final num rounded = (value * math.pow(10, len - numDigits)).round() * math.pow(10, numDigits - len);
+    final num rounded = (value * math.pow(10, len - numDigits)).round() *
+        math.pow(10, numDigits - len);
 
     return rounded.toStringAsFixed(math.max(len - numDigits, 0));
   }
@@ -284,7 +299,11 @@ class Infinity with Logger implements Comparable<Infinity> {
     } else if (layer == 1) {
       return double.parse('${normalizedMantissa}e$normalizedExponent');
     } else {
-      return mantissa > 0 ? sign > 0 ? double.infinity : double.negativeInfinity : 0;
+      return mantissa > 0
+          ? sign > 0
+              ? double.infinity
+              : double.negativeInfinity
+          : 0;
     }
   }
 
@@ -293,7 +312,9 @@ class Infinity with Logger implements Comparable<Infinity> {
   @override
   bool operator ==(dynamic other) {
     if (other is Infinity) {
-      return sign == other.sign && layer == other.layer && mantissa == other.mantissa;
+      return sign == other.sign &&
+          layer == other.layer &&
+          mantissa == other.mantissa;
     }
 
     return false;

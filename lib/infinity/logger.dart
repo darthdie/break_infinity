@@ -8,18 +8,21 @@ mixin Logger {
     return debug && severity.index >= showSeverity.index;
   }
 
-  void logDebug(String message, {Severity severity = Severity.debug, StackTrace stackTrace}) {
+  void logDebug(String message,
+      {Severity severity = Severity.debug, StackTrace? stackTrace}) {
     if (_showLog(severity)) {
       print('${_getPrefix(severity)}$message');
     }
   }
 
-  void logError(Object error, {StackTrace stackTrace}) {
-    logDebug(error.toString(), stackTrace: stackTrace, severity: Severity.error);
+  void logError(Object error, {StackTrace? stackTrace}) {
+    logDebug(error.toString(),
+        stackTrace: stackTrace, severity: Severity.error);
   }
 
-  void logVerbose(Object error, {String debugString, StackTrace stackTrace}) {
-    logDebug('== ${error.toString()}', stackTrace: stackTrace, severity: Severity.verbose);
+  void logVerbose(Object error, {String? debugString, StackTrace? stackTrace}) {
+    logDebug('== ${error.toString()}',
+        stackTrace: stackTrace, severity: Severity.verbose);
     if (debugString != null) {
       logDebug('== $debugString', severity: Severity.verbose);
     }
@@ -40,9 +43,11 @@ mixin Logger {
     return '${_format(_now.hour)}:${_format(_now.minute)}:${_format(_now.second)}.${_format(_now.millisecond, padding: 3)}';
   }
 
-  void logOperation(String message, {bool isMainOperation = false, bool exiting = false}) {
+  void logOperation(String message,
+      {bool isMainOperation = false, bool exiting = false}) {
     if (_showLog(isMainOperation ? Severity.info : Severity.debug)) {
-      print('${_getPrefix(isMainOperation ? Severity.info : Severity.debug)}${exiting ? '<=' : '=>'} $message');
+      print(
+          '${_getPrefix(isMainOperation ? Severity.info : Severity.debug)}${exiting ? '<=' : '=>'} $message');
     }
   }
 

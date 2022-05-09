@@ -3,12 +3,13 @@ part of infinity;
 extension Round on Infinity {
   Infinity round() {
     logAbbreviation('round on ${toString()}');
-    Infinity _result;
+    Infinity? _result;
 
     if (mantissa < 0) {
       _result = Infinity.zero();
     } else if (layer == 0) {
-      _result = Infinity.fromComponents(sign, 0, mantissa.roundToDouble(), false);
+      _result =
+          Infinity.fromComponents(sign, 0, mantissa.roundToDouble(), false);
     }
 
     _result ??= this;
@@ -19,12 +20,13 @@ extension Round on Infinity {
 
   Infinity floor() {
     logAbbreviation('floor on ${toString()}');
-    Infinity _result;
+    Infinity? _result;
 
     if (mantissa < 0) {
       _result = Infinity.zero();
     } else if (layer == 0) {
-      _result = Infinity.fromComponents(sign, 0, mantissa.floorToDouble(), false);
+      _result =
+          Infinity.fromComponents(sign, 0, mantissa.floorToDouble(), false);
     }
 
     _result ??= this;
@@ -35,12 +37,13 @@ extension Round on Infinity {
 
   Infinity ceil() {
     logAbbreviation('ceil on ${toString()}');
-    Infinity _result;
+    Infinity? _result;
 
     if (mantissa < 0) {
       _result = Infinity.zero();
     } else if (layer == 0) {
-      _result = Infinity.fromComponents(sign, 0, mantissa.ceilToDouble(), false);
+      _result =
+          Infinity.fromComponents(sign, 0, mantissa.ceilToDouble(), false);
     }
 
     _result ??= this;
@@ -51,12 +54,13 @@ extension Round on Infinity {
 
   Infinity truncate() {
     logAbbreviation('truncate on ${toString()}');
-    Infinity _result;
+    Infinity? _result;
 
     if (mantissa < 0) {
       _result = Infinity.zero();
     } else if (layer == 0) {
-      _result = Infinity.fromComponents(sign, 0, mantissa.truncateToDouble(), false);
+      _result =
+          Infinity.fromComponents(sign, 0, mantissa.truncateToDouble(), false);
     }
 
     _result ??= this;

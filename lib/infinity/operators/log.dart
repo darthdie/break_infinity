@@ -3,16 +3,17 @@ part of infinity;
 extension Log on Infinity {
   /// iterated log/repeated log: The result of applying log(base) 'times' times in a row. Approximately equal to subtracting (times) from the number's slog representation. Equivalent to tetrating to a negative height.
   /// Works with negative and positive real heights.
-  Infinity iteratedLog({int times = 1, Infinity base}) {
-    logOperation('Iterated log ${toString()}: Times: $times: Base: ${base.toString()}');
-    Infinity _result;
+  Infinity? iteratedLog({int times = 1, required Infinity base}) {
+    logOperation(
+        'Iterated log ${toString()}: Times: $times: Base: ${base.toString()}');
+    Infinity? _result;
 
     if (times < 0) {
       _result = base.tetrate(height: -times.toDouble(), other: this);
     } else {
       final int fullTimes = times;
       times = times.truncate();
-      final int fraction = fullTimes - times;
+      final fraction = fullTimes - times;
 
       if (layer - base.layer > 3) {
         final int layerLoss = math.min(times, layer - base.layer - 3).toInt();
@@ -20,7 +21,7 @@ extension Log on Infinity {
         layer -= layerLoss;
       }
 
-      Infinity _result = this;
+      Infinity? _result = this;
       for (int i = 0; i < times; ++i) {
         _result = log(base);
         //bail if we're NaN
@@ -54,9 +55,11 @@ extension Log on Infinity {
     if (sign <= 0) {
       _result = Infinity.nan();
     } else if (layer > 0) {
-      _result = Infinity.fromComponents(mantissa.toInt().sign, --layer, mantissa.abs());
+      _result = Infinity.fromComponents(
+          mantissa.toInt().sign, --layer, mantissa.abs());
     } else {
-      _result = Infinity.fromComponents(mantissa.toInt().sign, 0, mantissa.log10());
+      _result =
+          Infinity.fromComponents(mantissa.toInt().sign, 0, mantissa.log10());
     }
 
     logOperation('Log10 ${toString()} = $_result', exiting: true);
@@ -70,7 +73,7 @@ extension Log on Infinity {
     int result = 0;
     Infinity copy = this;
 
-    Infinity _result;
+    Infinity? _result;
 
     if (mantissa < 0) {
       _result = Infinity.one().neg();
@@ -84,7 +87,8 @@ extension Log on Infinity {
           copy = base.pow(copy);
           result -= 1;
         } else if (copy < Infinity.one()) {
-          _result = Infinity.fromNum(result + copy.toNumber() - 1); //<-- THIS IS THE CRITICAL FUNCTION
+          _result = Infinity.fromNum(
+              result + copy.toNumber() - 1); //<-- THIS IS THE CRITICAL FUNCTION
           //^ Also have to change tetrate payload handling and layerAdd10 if this is changed!
         } else {
           result += 1;
@@ -108,7 +112,8 @@ extension Log on Infinity {
     } else if (sign == 1 && layer == 0 && mantissa == 1) {
       _result = Infinity.nan();
     } else if (layer == 0 && other.layer == 0) {
-      _result = Infinity.fromComponents(sign, 0, math.log(mantissa) / math.log(other.mantissa));
+      _result = Infinity.fromComponents(
+          sign, 0, math.log(mantissa) / math.log(other.mantissa));
     } else {
       _result = _log10() / other._log10();
     }

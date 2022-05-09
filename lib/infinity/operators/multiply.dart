@@ -2,11 +2,13 @@ part of infinity;
 
 extension Multiply on Infinity {
   Infinity multiply(Infinity other) {
-    logOperation('Multiply ${toString()} and ${other.toString()}', isMainOperation: true);
-    Infinity _result;
+    logOperation('Multiply ${toString()} and ${other.toString()}',
+        isMainOperation: true);
+    Infinity? _result;
 
     //Which number is bigger in terms of its multiplicative distance from 1?
-    final bool _compare = layer > other.layer || (layer == other.layer && mantissa.abs() > other.mantissa.abs());
+    final bool _compare = layer > other.layer ||
+        (layer == other.layer && mantissa.abs() > other.mantissa.abs());
     final Infinity a = _compare ? this : other;
     final Infinity b = _compare ? other : this;
 
@@ -29,17 +31,25 @@ extension Multiply on Infinity {
       //Special case: If one of the numbers is layer 3 or higher or one of the numbers is 2+ layers bigger than the other, just take the bigger number.
       _result = Infinity.fromComponents(a.sign * b.sign, a.layer, a.mantissa);
     } else if (a.layer == 1 && b.layer == 0) {
-      _result = Infinity.fromComponents(a.sign * b.sign, 1, a.mantissa + b.mantissa.log10());
+      _result = Infinity.fromComponents(
+          a.sign * b.sign, 1, a.mantissa + b.mantissa.log10());
     } else if (a.layer == 1 && b.layer == 1) {
-      _result = Infinity.fromComponents(a.sign * b.sign, 1, a.mantissa + b.mantissa);
+      _result =
+          Infinity.fromComponents(a.sign * b.sign, 1, a.mantissa + b.mantissa);
     } else if (a.layer == 2 && b.layer == 1) {
-      final Infinity _newMag = Infinity.fromComponents(a.mantissa.sign.toInt(), a.layer - 1, a.mantissa.abs())
-          .add(Infinity.fromComponents(b.mantissa.sign.toInt(), b.layer - 1, b.mantissa.abs()));
-      _result = Infinity.fromComponents(a.sign * b.sign, _newMag.layer + 1, _newMag.sign * _newMag.mantissa);
+      final Infinity _newMag = Infinity.fromComponents(
+              a.mantissa.sign.toInt(), a.layer - 1, a.mantissa.abs())
+          .add(Infinity.fromComponents(
+              b.mantissa.sign.toInt(), b.layer - 1, b.mantissa.abs()));
+      _result = Infinity.fromComponents(
+          a.sign * b.sign, _newMag.layer + 1, _newMag.sign * _newMag.mantissa);
     } else if (a.layer == 2 && b.layer == 2) {
-      final Infinity _newMag = Infinity.fromComponents(a.mantissa.sign.toInt(), a.layer - 1, a.mantissa.abs())
-          .add(Infinity.fromComponents(b.mantissa.sign.toInt(), b.layer - 1, b.mantissa.abs()));
-      _result = Infinity.fromComponents(a.sign * b.sign, _newMag.layer + 1, _newMag.sign * _newMag.mantissa);
+      final Infinity _newMag = Infinity.fromComponents(
+              a.mantissa.sign.toInt(), a.layer - 1, a.mantissa.abs())
+          .add(Infinity.fromComponents(
+              b.mantissa.sign.toInt(), b.layer - 1, b.mantissa.abs()));
+      _result = Infinity.fromComponents(
+          a.sign * b.sign, _newMag.layer + 1, _newMag.sign * _newMag.mantissa);
     }
 
     _result ??= Infinity.zero();
@@ -49,7 +59,8 @@ extension Multiply on Infinity {
       _result.roundMantissa();
     }
 
-    logOperation('${toString()} * $other = $_result', exiting: true, isMainOperation: true);
+    logOperation('${toString()} * $other = $_result',
+        exiting: true, isMainOperation: true);
     return _result;
   }
 
